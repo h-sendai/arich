@@ -158,7 +158,7 @@ int ArichMonitor::daq_start()
         m_hist = 0;
     }
 
-    int m_hist_bin = 100;
+    int m_hist_bin = N_CH;
     double m_hist_min = 0.0;
     double m_hist_max = (double) N_CH;
 
