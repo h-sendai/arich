@@ -13,3 +13,5 @@ syntax: glob
 .confFilePath
 *Comp
 autogen/*
+omninames*
+rtc.conf

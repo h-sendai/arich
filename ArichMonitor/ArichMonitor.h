@@ -75,6 +75,10 @@ private:
     unsigned int  m_event_byte_size;
     struct sampleData m_sampleData;
 
+    const static int HEADER_LEN = 34;
+    const static int N_CHUNK    = 1000;
+    const static int N_CH       = 144;
+    const static int ONE_DATA_SIZE = HEADER_LEN + 1*N_CH; // 1 = 1 bytes for one ch
     bool m_debug;
 };
 

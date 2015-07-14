@@ -52,8 +52,9 @@ private:
 
     DAQMW::Sock* m_sock;               /// socket for data server
 
-    static const int EVENT_BYTE_SIZE  = 8;    // event byte size
-    static const int SEND_BUFFER_SIZE = 1024; //
+    // static const int EVENT_BYTE_SIZE  = 8;    // event byte size
+    static const int N_CHUNK = 1000;
+    static const int SEND_BUFFER_SIZE = 178 * N_CHUNK; // Read 1000 data set at once
     unsigned char m_data[SEND_BUFFER_SIZE];
     unsigned int  m_recv_byte_size;
 

@@ -160,7 +160,7 @@ int ArichMonitor::daq_start()
 
     int m_hist_bin = 100;
     double m_hist_min = 0.0;
-    double m_hist_max = 1000.0;
+    double m_hist_max = (double) N_CH;
 
     gStyle->SetStatW(0.4);
     gStyle->SetStatH(0.2);
@@ -233,13 +233,21 @@ int ArichMonitor::decode_data(const unsigned char* mydata)
 
 int ArichMonitor::fill_data(const unsigned char* mydata, const int size)
 {
-    for (int i = 0; i < size/(int)ONE_EVENT_SIZE; i++) {
-        decode_data(mydata);
-        float fdata = m_sampleData.data/1000.0; // 1000 times value is received
-        m_hist->Fill(fdata);
+    //for (int i = 0; i < size/(int)ONE_EVENT_SIZE; i++) {
+    //    decode_data(mydata);
+    //    float fdata = m_sampleData.data/1000.0; // 1000 times value is received
+    //    m_hist->Fill(fdata);
+    //
+    //   mydata+=ONE_EVENT_SIZE;
+    //}
 
-        mydata+=ONE_EVENT_SIZE;
+    for (int i = 0; i < N_CH; i++) {
+        int data = mydata[HEADER_LEN + i];
+        if (data > 0) {
+            m_hist->Fill(i);
+        }
     }
+
     return 0;
 }
 
@@ -293,7 +301,9 @@ int ArichMonitor::daq_run()
     /////////////  Write component main logic here. /////////////
     memcpy(&m_recv_data[0], &m_in_data.data[HEADER_BYTE_SIZE], m_event_byte_size);
 
-    fill_data(&m_recv_data[0], m_event_byte_size);
+    for (int i = 0; i < N_CHUNK; i++) {
+        fill_data(&m_recv_data[i*ONE_DATA_SIZE], m_event_byte_size);
+    }
 
     if (m_monitor_update_rate == 0) {
         m_monitor_update_rate = 1000;
