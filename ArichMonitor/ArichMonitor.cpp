@@ -42,6 +42,8 @@ ArichMonitor::ArichMonitor(RTC::Manager* manager)
       m_min(0),
       m_max(0),
       m_monitor_update_rate(30),
+      m_use_log_y(false),
+      m_monitor_histogram_reset_rate(0),
       m_event_byte_size(0),
       m_debug(false)
 {
@@ -118,6 +120,16 @@ int ArichMonitor::parse_params(::NVList* list)
             char *offset;
             m_monitor_update_rate = (int)strtol(svalue.c_str(), &offset, 10);
         }
+        if (sname == "useLogy") {
+            if (svalue == "YES" || svalue == "Yes" || svalue == "yes") {
+                m_use_log_y = true;
+            }
+        }
+        if (sname == "monitorHistogramResetRate") {
+            char *offset;
+            m_monitor_histogram_reset_rate = (int)strtol(svalue.c_str(), &offset, 10);
+            std::cerr << "monitor histogram_reset_rate: " << svalue << std::endl;
+        }
         // If you have more param in config.xml, write here
     }
 
@@ -180,6 +192,9 @@ int ArichMonitor::daq_stop()
     std::cerr << "*** ArichMonitor::stop" << std::endl;
 
     m_hist->Draw();
+    if (m_use_log_y) {
+        m_canvas->SetLogy();
+    }
     m_canvas->Update();
 
     reset_InPort();
@@ -312,7 +327,16 @@ int ArichMonitor::daq_run()
     unsigned long sequence_num = get_sequence_num();
     if ((sequence_num % m_monitor_update_rate) == 0) {
         m_hist->Draw();
+        if (m_use_log_y) {
+            m_canvas->SetLogy();
+        }
         m_canvas->Update();
+    }
+    if (m_monitor_histogram_reset_rate > 0 && sequence_num != 0) {
+        if ((sequence_num % m_monitor_histogram_reset_rate) == 0) {
+            std::cerr << "histogram reset" << std::endl;
+            m_hist->Reset();
+        }
     }
     /////////////////////////////////////////////////////////////
     inc_sequence_num();                      // increase sequence num.

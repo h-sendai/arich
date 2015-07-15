@@ -70,6 +70,8 @@ private:
     double   m_min;
     double   m_max;
     int      m_monitor_update_rate;
+    bool     m_use_log_y;
+    int      m_monitor_histogram_reset_rate;
     const static unsigned int DATA_BUF_SIZE = 1024*1024;
     unsigned char m_recv_data[DATA_BUF_SIZE];
     unsigned int  m_event_byte_size;

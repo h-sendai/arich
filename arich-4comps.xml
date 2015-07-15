@@ -68,7 +68,12 @@
                   <inPort from="Dispatcher0:dispatcher_out2">arichmonitor_in</inPort>
                </inPorts>
                <outPorts/>
-               <params/>
+               <params>
+                  <param pid="useLogy">yes</param>
+                  <param pid="monitorUpdateRate">100</param>
+                  <!-- dont reset: 0 -->
+                  <param pid="monitorHistogramResetRate">1000</param>
+               </params>
             </component>
          </components>
       </daqGroup>

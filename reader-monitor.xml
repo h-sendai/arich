@@ -27,8 +27,9 @@
                     </outPorts>
                     <params>
                         <param pid="srcAddr">192.168.10.16</param>
-                        <!-- emulator test -->
-                        <!-- <param pid="srcAddr">127.0.0.1</param> -->
+                        <!--  test
+                        <param pid="srcAddr">127.0.0.1</param>
+                        -->
                         <param pid="srcPort">24</param>
                     </params>
                 </component>
@@ -45,7 +46,10 @@
                     <outPorts>
                     </outPorts>
                     <params>
+                        <param pid="useLogy">yes</param>
                         <param pid="monitorUpdateRate">100</param>
+                        <!-- dont reset: 0 -->
+                        <param pid="monitorHistogramResetRate">1000</param>
                     </params>
                 </component>
             </components>
