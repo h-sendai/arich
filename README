@@ -1,27 +1,27 @@
-Arich�ƥ������ɤߤ��������ƥ�
+Arichテスト用読みだしシステム
 
 
-(arich-4comps.xml�Ǥι���)
-Readout Module - ArichReader - Dispatcher --- ArichLogger  (�ϡ��ɥǥ�����)
-                                           |_ ArichMonitor (���̤˥ҥ��ȥ����)
+(arich-4comps.xmlでの構成)
+Readout Module - ArichReader - Dispatcher --- ArichLogger  (ハードディスク)
+                                           |_ ArichMonitor (画面にヒストグラム)
 
-(reader-monitor.xml�Ǥι���)
-Readout Module - ArichReader - ArichMonitor (���̤˥ҥ��ȥ����)
+(reader-monitor.xmlでの構成)
+Readout Module - ArichReader - ArichMonitor (画面にヒストグラム)
 
-�����ͥ�� 144
+チャンネル数 144
 
-�إå� 34�Х���
-���٥�ȥǡ��� 144�Х���
-34 + 144 = 178�Х���
-178�Х��Ȥ��ɤ߽Ф��ȡ����ʥ���ݡ��ͥ�Ȥ�����Ȥ��˥����С��إåɤ�
-�礭���ʤ�Τ�ArichReader��1000���ɤ߽Ф��Ƹ��ʤ�����褦�ˤ���
-(ArichReader.h��N_CHUNK)
+ヘッダ 34バイト
+イベントデータ 144バイト
+34 + 144 = 178バイト
+178バイトで読み出すと、後段コンポーネントに送るときにオーバーヘッドが
+大きくなるのでArichReaderで1000個読み出して後段へ送るようにした
+(ArichReader.h中N_CHUNK)
 
-ArichLogger����¸����ǡ�����/tmp/����¸����롣�����ѹ�����ˤ�
-arich-4comps.xml��
+ArichLoggerが保存するデータは/tmp/に保存される。場所を変更するには
+arich-4comps.xmlの
 <param pid="dirName">/tmp</param>
-���ѹ����ƺƵ�ư��
-1GB�񤯤ȼ��Υե�����򳫤���1GB�Υ���������Ƥ���Τ�arich-4comps.xml��
+を変更して再起動。
+1GB書くと次のファイルを開く。1GBのサイズを決めているのはarich-4comps.xmlの
 <param pid="maxFileSizeInMegaByte">1024</param>
-�ǿ�����4096�ˤ����4GB�񤤤Ƽ��Υե�����˽񤯤褦�ˤʤ롣
+で数字を4096にすると4GB書いて次のファイルに書くようになる。
 
