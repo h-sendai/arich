@@ -40,7 +40,7 @@ ArichMonitor::ArichMonitor(RTC::Manager* manager)
       m_hist(0),
       m_timestamp(0),
       m_timestamp_x(0.2),
-      m_timestamp_y(0.9),
+      m_timestamp_y(0.92),
       m_timestamp_size(0.1),
       m_bin(0),
       m_min(0),
@@ -187,15 +187,16 @@ int ArichMonitor::daq_start()
     double m_hist_min = 0.0;
     double m_hist_max = (double) N_CH;
 
-    gStyle->SetStatW(0.4);
-    gStyle->SetStatH(0.2);
-    gStyle->SetOptStat("em");
+    // gStyle->SetStatW(0.4);
+    // gStyle->SetStatH(0.2);
+    // gStyle->SetOptStat("em");
 
     m_hist = new TH1F("hist", "hist", m_hist_bin, m_hist_min, m_hist_max);
-    m_hist->GetXaxis()->SetNdivisions(5);
-    m_hist->GetYaxis()->SetNdivisions(4);
-    m_hist->GetXaxis()->SetLabelSize(0.07);
-    m_hist->GetYaxis()->SetLabelSize(0.06);
+    // m_hist->GetXaxis()->SetNdivisions(5);
+    // m_hist->GetYaxis()->SetNdivisions(4);
+    // m_hist->GetXaxis()->SetLabelSize(0.07);
+    // m_hist->GetYaxis()->SetLabelSize(0.06);
+    m_hist->SetTitle("");  // don't draw histogram title
 
     m_timestamp = new TText();
 
@@ -210,7 +211,7 @@ int ArichMonitor::daq_stop()
     struct tm tm;
     gettimeofday(&tv, NULL);
     localtime_r(&tv.tv_sec, &tm);
-    strftime(m_timebuf, sizeof(m_timebuf), "%T", &tm);
+    strftime(m_timebuf, sizeof(m_timebuf), "%F %T", &tm);
 
     m_timestamp->SetNDC();
     m_timestamp->SetTextSize(m_timestamp_size);
@@ -357,7 +358,7 @@ int ArichMonitor::daq_run()
         struct tm tm;
         gettimeofday(&tv, NULL);
         localtime_r(&tv.tv_sec, &tm);
-        strftime(m_timebuf, sizeof(m_timebuf), "%T", &tm);
+        strftime(m_timebuf, sizeof(m_timebuf), "%F %T", &tm);
 
         m_timestamp->SetNDC();
         m_timestamp->SetTextSize(m_timestamp_size);
