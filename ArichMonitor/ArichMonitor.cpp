@@ -38,6 +38,10 @@ ArichMonitor::ArichMonitor(RTC::Manager* manager)
       m_in_status(BUF_SUCCESS),
       m_canvas(0),
       m_hist(0),
+      m_timestamp(0),
+      m_timestamp_x(0.2),
+      m_timestamp_y(0.9),
+      m_timestamp_size(0.1),
       m_bin(0),
       m_min(0),
       m_max(0),
@@ -148,6 +152,11 @@ int ArichMonitor::daq_unconfigure()
         delete m_hist;
         m_hist = 0;
     }
+    if (m_timestamp) {
+        delete m_timestamp;
+        m_timestamp = 0;
+    }
+
     return 0;
 }
 
@@ -169,6 +178,10 @@ int ArichMonitor::daq_start()
         delete m_hist;
         m_hist = 0;
     }
+    if (m_timestamp) {
+        delete m_timestamp;
+        m_timestamp = 0;
+    }
 
     int m_hist_bin = N_CH;
     double m_hist_min = 0.0;
@@ -184,6 +197,8 @@ int ArichMonitor::daq_start()
     m_hist->GetXaxis()->SetLabelSize(0.07);
     m_hist->GetYaxis()->SetLabelSize(0.06);
 
+    m_timestamp = new TText();
+
     return 0;
 }
 
@@ -191,7 +206,19 @@ int ArichMonitor::daq_stop()
 {
     std::cerr << "*** ArichMonitor::stop" << std::endl;
 
+    struct timeval tv;
+    struct tm tm;
+    gettimeofday(&tv, NULL);
+    localtime_r(&tv.tv_sec, &tm);
+    strftime(m_timebuf, sizeof(m_timebuf), "%T", &tm);
+
+    m_timestamp->SetNDC();
+    m_timestamp->SetTextSize(m_timestamp_size);
+    m_timestamp->SetTextColor(2);
+    m_timestamp->SetText(m_timestamp_x, m_timestamp_y, m_timebuf);
+
     m_hist->Draw();
+    m_timestamp->Draw("same");
     if (m_use_log_y) {
         m_canvas->SetLogy();
     }
@@ -326,7 +353,19 @@ int ArichMonitor::daq_run()
 
     unsigned long sequence_num = get_sequence_num();
     if ((sequence_num % m_monitor_update_rate) == 0) {
+        struct timeval tv;
+        struct tm tm;
+        gettimeofday(&tv, NULL);
+        localtime_r(&tv.tv_sec, &tm);
+        strftime(m_timebuf, sizeof(m_timebuf), "%T", &tm);
+
+        m_timestamp->SetNDC();
+        m_timestamp->SetTextSize(m_timestamp_size);
+        m_timestamp->SetTextColor(2);
+        m_timestamp->SetText(m_timestamp_x, m_timestamp_y, m_timebuf);
+
         m_hist->Draw();
+        m_timestamp->Draw("same");
         if (m_use_log_y) {
             m_canvas->SetLogy();
         }

@@ -19,6 +19,7 @@
 #include "TCanvas.h"
 #include "TStyle.h"
 #include "TApplication.h"
+#include "TText.h"
 
 #include "SampleData.h"
 
@@ -66,6 +67,10 @@ private:
     ////////// ROOT Histogram //////////
     TCanvas *m_canvas;
     TH1F    *m_hist;
+    TText   *m_timestamp;
+    double   m_timestamp_x;
+    double   m_timestamp_y;
+    double   m_timestamp_size;
     int      m_bin;
     double   m_min;
     double   m_max;
@@ -76,6 +81,7 @@ private:
     unsigned char m_recv_data[DATA_BUF_SIZE];
     unsigned int  m_event_byte_size;
     struct sampleData m_sampleData;
+    char     m_timebuf[32];  // for timestamp
 
     const static int HEADER_SIZE = 34;
     const static int N_CHUNK     = 1000;
