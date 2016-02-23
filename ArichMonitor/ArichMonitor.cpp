@@ -284,10 +284,28 @@ int ArichMonitor::fill_data(const unsigned char* mydata, const int size)
     //   mydata+=ONE_EVENT_SIZE;
     //}
 
+    // Channel Assignment
+    // +-------+
+    // |header |
+    // |       |
+    // +-------+
+    // |  143  |
+    // +-------+
+    // |  142  |
+    // +-------+
+    //     :
+    // +-------+
+    // |    2  |
+    // +-------+
+    // |    1  |
+    // +-------+
+    // |    0  |
+    // +-------+
     for (int i = 0; i < N_CH; i++) {
         unsigned char data = mydata[HEADER_SIZE + i];
+        unsigned int ch = N_CH - i - 1;
         if (data != 0) { // does not need to decode (only lookup zero or not)
-            m_hist->Fill(i);
+            m_hist->Fill(ch);
         }
     }
 
